@@ -1,7 +1,7 @@
 //Global variables
-var renderer, scene, camera, octoMain, particle;
+var renderer, scene, camera, octoMain, particles;
 var partNum = 1000;
-
+var spread;
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioCtx, audioElement, source, analyser, bufferLength, dataArray, frequencyData;
 
@@ -31,7 +31,6 @@ function init(){
   console.log({ bufferLength })
 
   dataArray = new Uint8Array(bufferLength);
-  analyser.getByteFrequencyData(dataArray);
 
   //Configure renderer settings-------------------------------------------------
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -68,24 +67,11 @@ function init(){
 
   var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-  particleObj = new THREE.Object3D();
-  scene.add(particleObj);
-  var particleGeo = new THREE.TetrahedronGeometry(0.8, 1);
-  var particleMat = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    shading: THREE.FlatShading
-  });
+
+
 
 //particle creation and positioning
-  for (var i = 0; i < partNum; i++) {
-    var particles = new THREE.Mesh(particleGeo, particleMat);
-    particles.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    particles.position.multiplyScalar(150 + (Math.random() * 250));
-    particles.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-    scene.add(particles);
-    particleObj.add(particles);
 
-  }
 
   window.addEventListener('resize', onWindowResize, false);
 
@@ -95,12 +81,17 @@ function init(){
 }
 
 
-
 // Render Loop
 function animate(){
+
   requestAnimationFrame(animate);
 
-  console.log(dataArray);
+  console.log(spread);
+
+  analyser.getByteFrequencyData(dataArray);
+  spread = dataArray[1] / 0.75;
+
+
   octoMain.rotation.x += 0.001;
   octoMain.rotation.y -= 0.001;
 
@@ -110,6 +101,7 @@ function animate(){
   // Render the scene
   renderer.clear();
   renderer.render(scene, camera);
+  return spread;
 }
 
 //Keep everything appearing properly on screen when window resizes
@@ -125,6 +117,7 @@ function geometry(){
   var geometryOcto = new THREE.IcosahedronGeometry(5, 2);
   scene.add(octoMain);
 
+
   //Create the materials
   var octoMaterial = new THREE.MeshPhongMaterial({
     color: 0xffffff,
@@ -135,4 +128,21 @@ function geometry(){
   var octoMesh = new THREE.Mesh(geometryOcto, octoMaterial);
   octoMesh.scale.x = octoMesh.scale.y = octoMesh.scale.z = 16;
   octoMain.add(octoMesh);
+
+  particleObj = new THREE.Object3D();
+  scene.add(particleObj);
+  var particleGeo = new THREE.TetrahedronGeometry(0.8, 1);
+  var particleMat = new THREE.MeshPhongMaterial({
+    color: 0xffffff,
+    shading: THREE.FlatShading
+  });
+
+  for (var i = 0; i < partNum; i++) {
+    var particles = new THREE.Mesh(particleGeo, particleMat);
+    particles.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+    particles.position.multiplyScalar(120 + (Math.random() * 250));
+    particles.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+    scene.add(particles);
+    particleObj.add(particles);
+  }
 }
