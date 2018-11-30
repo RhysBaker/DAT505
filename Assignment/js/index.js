@@ -1,9 +1,12 @@
 //Global variables
-var renderer, scene, camera, octoMain, particles;
+var renderer, scene, camera, octoMain, particle;
 var partNum = 1000;
 var spread;
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioCtx, audioElement, source, analyser, bufferLength, dataArray, frequencyData;
+var particlesStored = [];
+var currentSpread = 150;
+
 
 //Execute the main functions when the page loads
 
@@ -13,9 +16,11 @@ startButton.addEventListener( 'click', init );
 
 
 function init(){
+  // overlay for new chrome autoplay t&s
   var overlay = document.getElementById( 'overlay' );
   overlay.remove();
 
+//Audio handling
   audioCtx = new AudioContext();
   audio = document.querySelector('audio');
   audio.play();
@@ -32,7 +37,8 @@ function init(){
 
   dataArray = new Uint8Array(bufferLength);
 
-  //Configure renderer settings-------------------------------------------------
+
+  //renderer settings
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio((window.devicePixelRatio) ? window.devicePixelRatio : 1);
   renderer.setSize( window.innerWidth, window.innerHeight );
@@ -65,43 +71,59 @@ function init(){
   scene.add( lights[1] );
   scene.add( lights[2] );
 
+//orbit controls
   var controls = new THREE.OrbitControls(camera, renderer.domElement);
-
-
-
-
-//particle creation and positioning
-
 
   window.addEventListener('resize', onWindowResize, false);
 
+//call functions
   geometry();
   animate();
+  particles();
 //end of init
 }
 
 
 // Render Loop
 function animate(){
-
   requestAnimationFrame(animate);
-
+  spread = dataArray[1] / 0.8;
   console.log(spread);
-
   analyser.getByteFrequencyData(dataArray);
-  spread = dataArray[1] / 0.75;
-
-
   octoMain.rotation.x += 0.001;
   octoMain.rotation.y -= 0.001;
 
-  particleObj.rotation.x += 0.0005;
-  particleObj.rotation.y -= 0.0005;
+
+
+  particlesStored.forEach(function(part) {
+    part.position.multiplyScalar(spread + (Math.random() * 250));
+  })
+
+  // particle.rotation.x += 0.0005;
+  // particle.rotation.y -= 0.0005;
 
   // Render the scene
   renderer.clear();
   renderer.render(scene, camera);
-  return spread;
+}
+
+function particles() {
+  for (var i = 0; i < partNum; i++) {
+
+    particle = new THREE.TetrahedronGeometry(0.8, 1);
+    particleMat = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading });
+    particle  = new THREE.Mesh(particle, particleMat);
+
+     particle.position.x = Math.random() - 0.5;
+     console.log(particle.position.x)
+     particle.position.z = Math.random() - 0.5;
+     particle.position.y = Math.random() - 0.5;
+     particle.position.multiplyScalar(spread + (Math.random() * 250));
+
+      scene.add(particle);
+      particlesStored.push(particle);
+
+  }
 }
 
 //Keep everything appearing properly on screen when window resizes
@@ -128,21 +150,4 @@ function geometry(){
   var octoMesh = new THREE.Mesh(geometryOcto, octoMaterial);
   octoMesh.scale.x = octoMesh.scale.y = octoMesh.scale.z = 16;
   octoMain.add(octoMesh);
-
-  particleObj = new THREE.Object3D();
-  scene.add(particleObj);
-  var particleGeo = new THREE.TetrahedronGeometry(0.8, 1);
-  var particleMat = new THREE.MeshPhongMaterial({
-    color: 0xffffff,
-    shading: THREE.FlatShading
-  });
-
-  for (var i = 0; i < partNum; i++) {
-    var particles = new THREE.Mesh(particleGeo, particleMat);
-    particles.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-    particles.position.multiplyScalar(120 + (Math.random() * 250));
-    particles.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-    scene.add(particles);
-    particleObj.add(particles);
-  }
 }
