@@ -87,18 +87,25 @@ function init(){
 // Render Loop
 function animate(){
   requestAnimationFrame(animate);
+  //value that needs 
   spread = dataArray[1] / 0.8;
   console.log(spread);
+  
+  //audio
   analyser.getByteFrequencyData(dataArray);
+  
+  //planet animation
   octoMain.rotation.x += 0.001;
   octoMain.rotation.y -= 0.001;
 
 
-
+//particles animation
   particlesStored.forEach(function(part) {
+	  //trying to get the first value to change to the spread var everyframe smoothly 
     part.position.multiplyScalar(spread + (Math.random() * 250));
   })
 
+  //old
   // particle.rotation.x += 0.0005;
   // particle.rotation.y -= 0.0005;
 
@@ -109,13 +116,11 @@ function animate(){
 
 function particles() {
   for (var i = 0; i < partNum; i++) {
-
     particle = new THREE.TetrahedronGeometry(0.8, 1);
     particleMat = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading });
     particle  = new THREE.Mesh(particle, particleMat);
 
      particle.position.x = Math.random() - 0.5;
-     console.log(particle.position.x)
      particle.position.z = Math.random() - 0.5;
      particle.position.y = Math.random() - 0.5;
      particle.position.multiplyScalar(spread + (Math.random() * 250));
