@@ -5,7 +5,6 @@ var spread;
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioCtx, audioElement, source, analyser, bufferLength, dataArray, frequencyData;
 var particlesStored = [];
-var currentSpread = 150;
 
 
 //Execute the main functions when the page loads
@@ -87,27 +86,35 @@ function init(){
 // Render Loop
 function animate(){
   requestAnimationFrame(animate);
-  //value that needs 
-  spread = dataArray[1] / 0.8;
-  console.log(spread);
-  
+  //value that being used to determain the multiplyScalar
+  spread = dataArray[1] / 0.6;
+  // console.log(spread);
+
   //audio
   analyser.getByteFrequencyData(dataArray);
-  
-  //planet animation
+
+  // planet animation
   octoMain.rotation.x += 0.001;
   octoMain.rotation.y -= 0.001;
 
+  particlesStored.forEach(function(element, index) {
+    // console.log(elemeent, index)
+    if (spread > 0) {
+      // console.log(element.position, spread)
+      element.position.multiplyScalar(spread)
+    }
 
-//particles animation
-  particlesStored.forEach(function(part) {
-	  //trying to get the first value to change to the spread var everyframe smoothly 
-    part.position.multiplyScalar(spread + (Math.random() * 250));
   })
+  // particle.position.multiplyScalar(spread);
 
-  //old
-  // particle.rotation.x += 0.0005;
-  // particle.rotation.y -= 0.0005;
+
+
+// particles animation
+  // particlesStored.forEach(function(part, spread) {
+	//   //trying to get the first value to change to the spread var everyframe smoothly
+  //   // part.position.x += ((spread) - part.position.x) * 0.1;
+      // part.scale.x = spread;
+  // })
 
   // Render the scene
   renderer.clear();
@@ -123,8 +130,7 @@ function particles() {
      particle.position.x = Math.random() - 0.5;
      particle.position.z = Math.random() - 0.5;
      particle.position.y = Math.random() - 0.5;
-     particle.position.multiplyScalar(spread + (Math.random() * 250));
-
+     particle.position.multiplyScalar(600);
       scene.add(particle);
       particlesStored.push(particle);
 
