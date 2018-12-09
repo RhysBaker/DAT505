@@ -101,20 +101,15 @@ function animate(){
     // console.log(elemeent, index)
     if (spread > 0) {
       // console.log(element.position, spread)
-      element.position.multiplyScalar(spread)
+      element.position.x += ((element.position.x + spread) - element.position.x * 2) * 0.15;
+      // element.position.y -= ((element.position.y + spread) - element.position.y) * 0.15;
+      // element.position.x += ((element.position.x + spread) - element.position.x * 2) * 0.15
+
     }
 
   })
   // particle.position.multiplyScalar(spread);
 
-
-
-// particles animation
-  // particlesStored.forEach(function(part, spread) {
-	//   //trying to get the first value to change to the spread var everyframe smoothly
-  //   // part.position.x += ((spread) - part.position.x) * 0.1;
-      // part.scale.x = spread;
-  // })
 
   // Render the scene
   renderer.clear();
