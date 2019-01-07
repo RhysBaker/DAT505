@@ -1,0 +1,19 @@
+//particle creation and positioning
+// particleObj = new THREE.Object3D();
+// scene.add(particleObj);
+// particleGeo = new THREE.TetrahedronGeometry(0.8, 1);
+// particleMat = new THREE.MeshPhongMaterial({
+//   color: 0xffffff,
+//   shading: THREE.FlatShading
+// });
+//
+// for (var i = 0; i < partNum; i++) {
+//   particle = new THREE.Mesh(particleGeo, particleMat);
+//   particle.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+//
+//   particle.position.multiplyScalar(120 + (Math.random() * 250));
+//   particle.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+//   scene.add(particle);
+//
+//   // particleObj.add(particle);
+// }
