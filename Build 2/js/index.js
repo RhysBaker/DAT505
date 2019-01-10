@@ -67,28 +67,7 @@ analyser.getByteFrequencyData(dataArray);
   renderer.autoClear = false;
   document.getElementById('canvas').appendChild(renderer.domElement);
 
-  //DAT GUI
-    var params = {
-        color: 0xff00ff
-    };
 
-    var gui = new dat.GUI();
-
-    var planet = gui.addFolder( "Planet" );
-    planet.addColor( params, 'color' )
-          .onChange( function() { octoMesh.material.color.set( params.color ); } );
-    planet.open();
-
-    var stars = gui.addFolder( "Stars" );
-    stars.addColor( params, 'color' )
-          .onChange( function() { particle.material.color.set( params.color ); } );
-    stars.open();
-    var starsFunc = function() {
-      this.partNum = 1000;
-      // Define render logic ...
-    };
-    var text = new starsFunc();
-    stars.add(text, 'partNum', 500, 2500);
 
 //orbit controls
     var controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -128,7 +107,7 @@ octoMesh.scale.x = octoMesh.scale.y = octoMesh.scale.z = 16;
 // }
 
 //Create a two dimensional grid of objects, and position them accordingly
-for (var x = -200; x <= 200; x += 5) { 
+for (var x = -200; x <= 200; x += 5) {
     var boxGeometry = new THREE.BoxGeometry(1, 1, 1);
     //The color of the material is assigned a random color
     var boxMaterial = new THREE.MeshLambertMaterial({color: Math.random() * 0xFFFFFF});

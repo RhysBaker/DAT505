@@ -86,16 +86,6 @@ analyser.getByteFrequencyData(dataArray);
           .onChange( function() { octoMesh.material.color.set( params.color ); } );
     planet.open();
 
-    var stars = gui.addFolder( "Stars" );
-    stars.addColor( params, 'color' )
-          .onChange( function() { particle.material.color.set( params.color ); } );
-    stars.open();
-    var starsFunc = function() {
-      this.partNum = 1000;
-      // Define render logic ...
-    };
-    var text = new starsFunc();
-    stars.add(text, 'partNum', 500, 2500);
 
 //orbit controls
     var controls = new THREE.OrbitControls(camera, renderer.domElement);

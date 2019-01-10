@@ -6,7 +6,8 @@ CODEPEN: https://codepen.io/REKAP/
 
 
 ===============================================================
-To start open index.html
+To start open the Final Build folder with Atom
+Install the atom-live-server package and run the live server
 You will be greeted with an overlay
 Click the button that says "click to play"
 The project will automatically play
